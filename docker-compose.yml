@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    environment:
+      - ASPNETCORE_URLS=http://+:8000
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ./backend:/app
+
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/cert.key:/root/ssl/cert.key
+      - ./nginx/cert.pem:/root/ssl/cert.pem
+    ports:
+      - "443:443"
+    depends_on:
+      - backend
